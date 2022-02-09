@@ -7,22 +7,20 @@ const md = require('../middleware/middleware')
 const User = require('./users-model')
 const router = express.Router();
 
-router.get('/', (req, res) => {
+router.get('/', (req, res, next) => {
   // RETURN AN ARRAY WITH ALL THE USERS
   User.get()
     .then( user => {
       res.status(200).json(user)
     })
     .catch (() => {
-      res.json({ message: "The users information could not be retrieved" })
+     next({ message: "The users information could not be retrieved" })
     })
   
 });
 
 router.get('/:id', md.validateUserId, (req, res) => {
-  // RETURN THE USER OBJECT
-  // this needs a middleware to verify user id
-  res.send(`get '/:id' wired`)
+  res.json(req.user)  
 });
 
 router.post('/', md.validateUser, (req, res) => {

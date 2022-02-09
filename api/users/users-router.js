@@ -33,11 +33,15 @@ router.post('/', md.validateUser, (req, res, next) => {
     .catch(next)
 });
 
-router.put('/:id', md.validateUserId, md.validateUser, (req, res) => {
+router.put('/:id', md.validateUserId, md.validateUser, (req, res, next) => {
   // RETURN THE FRESHLY UPDATED USER OBJECT
   // this needs a middleware to verify user id
   // and another middleware to check that the request body is valid
-  res.send(`put '/:id' wired`)
+  User.update(req.params.id, req.body)
+    .then(updatedUser => {      
+      res.status(201).json(updatedUser)
+    })
+    .catch(next)
 });
 
 router.delete('/:id', md.validateUserId, (req, res) => {
